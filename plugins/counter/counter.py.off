@@ -1,9 +1,11 @@
-import time
-crontable = []
+from time import gmtime, strftime
 outputs = []
+crontable = []
 
 crontable.append([5,"say_time"])
 
 def say_time():
     #NOTE: you must add a real channel ID for this to work
-    outputs.append(["C0DEMSUG5", time.time()])
+    localtime = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
+    #outputs.append(["general", "bot started: " + str(localtime)])
+    outputs.append(["general", str(localtime)])

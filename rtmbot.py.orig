@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
 
 import sys
 sys.dont_write_bytecode = True
@@ -12,7 +11,6 @@ import sys
 import time
 import logging
 from argparse import ArgumentParser
-import traceback
 
 from slackclient import SlackClient
 
@@ -48,36 +46,6 @@ class RtmBot(object):
             self.last_ping = now
     def input(self, data):
         if "type" in data:
-            try:
-                if data["type"] == "message":
-                    if "team" in data and "user" in data:
-                        team_id = data["team"]
-                        user_id = data["user"]
-                        if team_id not in profiles:
-                            profiles[team_id] = dict()
-                        if user_id not in profiles[team_id]:
-                            json_res = json.dumps(self.slack_client.api_call("users.info", user=data["user"]), ensure_ascii=False)
-                            print(type(json_res))
-                            print(json_res)
-                            print(' ^^^ Try get json.dumps about user ^^^ ')
-                            str_res = json_res #.decode("utf-8", "strict")
-                            res = json.loads(str_res)
-                            profiles[team_id][user_id] = {
-                                                    "name": res["user"]["name"], 
-                                                    #"profile": res["user"]["profile"], 
-                                                    "tz": res["user"]["tz"],
-                                                    "is_bot": res["user"]["is_bot"],
-                                                    "real_name": res["user"]["real_name"],
-                                                    "tz_offset": res["user"]["tz_offset"],
-                                                    "tz_label": res["user"]["tz_label"],
-                                                    }
-                        data.update(profiles[team_id][user_id])
-                        #data["name"] = profiles[team_id][user_id]["name"]
-                        #data["tz"] = profiles[team_id][user_id]["tz"]
-                        #data["profile"] = profiles[team_id][user_id]["profile"]
-            except:
-                print("Parsing of message data didn't quite work as expected")
-                print(traceback.print_exc())
             function_name = "process_" + data["type"]
             dbg("got {}".format(function_name))
             for plugin in self.bot_plugins:
@@ -88,14 +56,11 @@ class RtmBot(object):
             limiter = False
             for output in plugin.do_output():
                 channel = self.slack_client.server.channels.find(output[0])
-                if channel is not None and output[1] is not None:
+                if channel != None and output[1] != None:
                     if limiter == True:
                         time.sleep(.1)
                         limiter = False
-                    #message = output[1].encode('ascii','ignore')
-                    #message = output[1].encode('utf8')
-                    message = output[1]
-                    #channel.send_message("{}".format(message.decode('ascii')))
+                    message = output[1].encode('ascii','ignore')
                     channel.send_message("{}".format(message))
                     limiter = True
     def crons(self):
@@ -220,15 +185,14 @@ if __name__ == "__main__":
                                 directory
                                 ))
 
-    config = yaml.load(open(args.config or 'rtmbot.conf', 'r'))
+    config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
     debug = config["DEBUG"]
     bot = RtmBot(config["SLACK_TOKEN"])
     site_plugins = []
     files_currently_downloading = []
     job_hash = {}
-    profiles = {}
 
-    if "DAEMON" in config:
+    if config.has_key("DAEMON"):
         if config["DAEMON"]:
             import daemon
             with daemon.DaemonContext():
