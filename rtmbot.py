@@ -13,6 +13,7 @@ import time
 import logging
 from argparse import ArgumentParser
 import traceback
+#import arrow
 
 from slackclient import SlackClient
 
@@ -59,7 +60,7 @@ class RtmBot(object):
                             json_res = json.dumps(self.slack_client.api_call("users.info", user=data["user"]), ensure_ascii=False)
                             print(type(json_res))
                             print(json_res)
-                            print(' ^^^ Try get json.dumps about user ^^^ ')
+                            print(' ^^^ Try to get json.dumps of user info ^^^ ')
                             str_res = json_res #.decode("utf-8", "strict")
                             res = json.loads(str_res)
                             profiles[team_id][user_id] = {
