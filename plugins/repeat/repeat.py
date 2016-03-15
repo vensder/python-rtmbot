@@ -11,7 +11,6 @@ def process_message(data):
     #outputs.append([data['channel'], "Hello from 'repeat' plugin \"{}\" in channel {} from user {}".format(data['text'], data['channel'], data['user']) ])
     print('\nEND PROCESS MESSAGE\n')
 
-
 '''
 #./rtmbot.py
 

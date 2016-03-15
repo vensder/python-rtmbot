@@ -58,11 +58,11 @@ class RtmBot(object):
                             profiles[team_id] = dict()
                         if user_id not in profiles[team_id]:
                             json_res = json.dumps(self.slack_client.api_call("users.info", user=data["user"]), ensure_ascii=False)
-                            print(type(json_res))
-                            print(json_res)
-                            print(' ^^^ Try to get json.dumps of user info ^^^ ')
-                            str_res = json_res #.decode("utf-8", "strict")
-                            res = json.loads(str_res)
+                            print(type(json_res)) # for debugging
+                            print(json_res) # for debugging
+                            print(' ^^^ Try to get json.dumps of user info ^^^ ') # for debugging
+                            #str_res = json_res #.decode("utf-8", "strict")
+                            res = json.loads(json_res)
                             profiles[team_id][user_id] = {
                                                     "name": res["user"]["name"], 
                                                     #"profile": res["user"]["profile"], 

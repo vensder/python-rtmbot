@@ -31,12 +31,12 @@ def process_message(data):
     print('type(data): ', type(data))
     print('data: ', data)
     
-    try:
-        text = data['text']
-    except KeyError:
-        data['text'] = 'KeyError Exception'
-        print(data['text'])
-        
+    if 'text' in:
+        try:
+            text = data['text']
+        except KeyError:
+            print('KeyError Exception')
+                    
     channel = data['channel']
     #outputs.append([data['channel'], "```Time zones plugin try to parse \"{}\" in channel {} from user {}```".format(data['text'], data['channel'], data['user']) ])
 
