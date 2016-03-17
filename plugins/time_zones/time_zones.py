@@ -8,7 +8,8 @@ from datetime import datetime
 outputs = []
 
 # set default Time Zone
-tz = 'UTC'
+tz = 'US/Eastern'
+
 
 def time_parsing(user_string,tz):
     for word in user_string.split():
@@ -38,13 +39,12 @@ def process_message(data):
             channel = data['channel']
             #outputs.append([data['channel'], "```Time zones plugin try to parse \"{}\" in channel {} from user {}```".format(data['text'], data['channel'], data['user']) ])
 
-
             if '@time' in text:
                 if 'tz' in data:
                     tz = data['tz']
                 else:
                     tz = 'UTC'
-                timezone_set = {'US/Eastern', 'Europe/Minsk', 'Europe/Moscow'}
+                timezone_set = {'America/New_York', 'Europe/Minsk'}
                 timezone_user = {tz}
                 timezonelist = list(timezone_set | timezone_user)
                 timezonelist.sort
