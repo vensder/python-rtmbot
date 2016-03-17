@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#import time
-#crontable = [] # what for?
+
 import arrow
 from datetime import datetime
+from configparser import ConfigParser
+import os
+
 #from pytz import timezone
 outputs = []
 
-# set default Time Zone
-tz = 'US/Eastern'
 
+parser = ConfigParser()
+parser.read(os.path.dirname(os.path.realpath(__file__)) + '/time_zones.conf')
+
+# set default Time Zone
+tz = parser.get('time_zones', 'default')
+timezone_set = parser.get('time_zones', 'set')
 
 def time_parsing(user_string,tz):
     for word in user_string.split():
@@ -27,8 +33,10 @@ def time_parsing(user_string,tz):
 
 
 def process_message(data):
-    #if data['channel'] == 'general':
-    #if data['channel'] == 'C0DEMSUG5':
+    
+    global tz
+    global timezone_set
+    
     print('type(data): ', type(data))
     print('data: ', data)
     
@@ -42,8 +50,8 @@ def process_message(data):
             if '@time' in text:
                 if 'tz' in data:
                     tz = data['tz']
-                else:
-                    tz = 'UTC'
+                #else:
+                #    tz = 'UTC'
                 timezone_set = {'America/New_York', 'Europe/Minsk'}
                 timezone_user = {tz}
                 timezonelist = list(timezone_set | timezone_user)
