@@ -34,8 +34,8 @@ def process_message(data):
     if 'text' in data:
         try:
             text = data['text']
-            channel = data['channel']
-            user = data['user']
+#            channel = data['channel']
+#            user = data['user'] #TODO add 'sent from <user>'
             
             if slack_user in text:
                 send_to_telegram(text.replace(slack_user, 'vensder'))
