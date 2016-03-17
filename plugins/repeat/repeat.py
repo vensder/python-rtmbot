@@ -3,13 +3,13 @@
 outputs = []
 
 def process_message(data):
-    print("\nBEGIN PROCESS MESSAGE\n")
+    print("\nBEGIN PROCESS MESSAGE from repeat.py\n")
     print('\ntype(data):\n ', type(data))
     print('\ndata: \n', data)
     #text = data['text']
     #channel = data['channel']
     #outputs.append([data['channel'], "Hello from 'repeat' plugin \"{}\" in channel {} from user {}".format(data['text'], data['channel'], data['user']) ])
-    print('\nEND PROCESS MESSAGE\n')
+    print('\nEND PROCESS MESSAGE from repeat.py\n')
 
 '''
 #./rtmbot.py
