@@ -4,9 +4,6 @@ from urllib.parse import urlencode
 
 import os
 
-print('getcwd: ', os.getcwd())
-print('pathdirname: ', os.path.dirname(os.path.realpath(__file__)))
-
 parser = ConfigParser()
 parser.read(os.path.dirname(os.path.realpath(__file__)) + '/telegram.conf')
 
