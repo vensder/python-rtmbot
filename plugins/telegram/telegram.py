@@ -38,7 +38,7 @@ def process_message(data):
 #            user = data['user'] #TODO add 'sent from <user>'
             
             if slack_user in text:
-                send_to_telegram(text.replace(slack_user, 'vensder'))
+                send_to_telegram(text.replace(slack_user, slack_name))
 
         except KeyError:
             print('KeyError Exception')
