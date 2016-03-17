@@ -1,6 +1,6 @@
 *.pyc
-/rtmbot.conf
 *.conf
 *.log
 env
 env3
+rtmbot
