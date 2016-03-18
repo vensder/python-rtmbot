@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 outputs = []
 
 def process_message(data):
+    #global profiles
     print("\nBEGIN PROCESS MESSAGE from repeat.py\n")
+    #print('profiles from repeat.py: ', profiles)
     print('\ntype(data):\n ', type(data))
     print('\ndata: \n', data)
     #text = data['text']

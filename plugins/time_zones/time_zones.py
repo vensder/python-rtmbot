@@ -5,8 +5,8 @@ import arrow
 from datetime import datetime
 from configparser import ConfigParser
 import os
-
 #from pytz import timezone
+
 outputs = []
 
 
@@ -15,7 +15,8 @@ parser.read(os.path.dirname(os.path.realpath(__file__)) + '/time_zones.conf')
 
 # set default Time Zone
 tz = parser.get('time_zones', 'default')
-timezone_set = parser.get('time_zones', 'set')
+# get set of Time Zones from config file
+timezone_set = set(parser.get('time_zones', 'set').split())
 
 def time_parsing(user_string,tz):
     for word in user_string.split():
@@ -37,8 +38,8 @@ def process_message(data):
     global tz
     global timezone_set
     
-    print('type(data): ', type(data))
-    print('data: ', data)
+    #print('type(data): ', type(data))
+    #print('data: ', data)
     
     if 'text' in data:
         try:
@@ -49,20 +50,20 @@ def process_message(data):
 
             if '@time' in text:
                 if 'tz' in data:
-                    tz = data['tz']
+                    tz = data['tz'] # get user's timezone from slack
                 #else:
                 #    tz = 'UTC'
-                timezone_set = {'America/New_York', 'Europe/Minsk'}
-                timezone_user = {tz}
-                timezonelist = list(timezone_set | timezone_user)
-                timezonelist.sort
+                #timezone_set = {'America/New_York', 'Europe/Minsk'}
+                timezone_user = {tz} # convert user's timezone to set'
+                timezonelist = list(timezone_set | timezone_user) # add user's timezone to set of main Time Zones'
+                timezonelist.sort() # sort list of time zones
                 time_string = time_parsing(text, tz)
-                print(time_string)
+                #print(time_string)
                 
                 local_time = arrow.get(datetime.now(), tz)
                 string_time = local_time.format('YYYY-MM-DD') + ' ' + time_string + local_time.format(':ss ZZ')
                 my_time = arrow.get(string_time, 'YYYY-MM-DD HH:mm:ss ZZ')
-                print(type(my_time))
+                #print(type(my_time))
 
                 for zone in timezonelist:
                     zone_time = my_time.to(zone)
@@ -73,7 +74,7 @@ def process_message(data):
                     outputs.append([data['channel'], hhmm_time + ' (' + zone + ')' + your_tz])
 
                 #outputs.append([channel, str(local.humanize())])
-                print('echo: ', text)
+                #print('echo: ', text)
                 #outputs.append([data['channel'], " time?" + 'user: ' + data['real_name']])
 
         except KeyError:

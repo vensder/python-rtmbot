@@ -81,9 +81,14 @@ class RtmBot(object):
                                                     "tz_label": res["user"]["tz_label"],
                                                     }
                         data.update(profiles[team_id][user_id])
+                        print('profiles: ', profiles)
                         #data["name"] = profiles[team_id][user_id]["name"]
                         #data["tz"] = profiles[team_id][user_id]["tz"]
                         #data["profile"] = profiles[team_id][user_id]["profile"]
+                #elif data["type"] == "presence_change":
+                else:
+                    if debug:
+                        print(data) # print data to stdout about any other events 
             except:
                 print("Parsing of message data didn't quite work as expected")
                 print(traceback.print_exc())

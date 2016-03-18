@@ -1,5 +1,8 @@
-#import time
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from time import gmtime, strftime
+
 outputs = []
 
 def canary():
