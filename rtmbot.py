@@ -56,47 +56,12 @@ class RtmBot(object):
 
     def input(self, data):
         if "type" in data:
-            try:
-                if data["type"] == "message":
-                    if "team" in data and "user" in data:
-                        team_id = data["team"]
-                        user_id = data["user"]
-                        if team_id not in profiles:
-                            profiles[team_id] = dict()
-                        if user_id not in profiles[team_id]:
-                            json_res = json.dumps(self.slack_client.api_call("users.info", user=data["user"]), ensure_ascii=False)
-                            if debug:
-                                print(type(json_res)) # for debugging
-                                print(json_res) # for debugging
-                                print(' ^^^ Try to get json.dumps of user info ^^^ ') # for debugging
-                            #str_res = json_res #.decode("utf-8", "strict")
-                            res = json.loads(json_res)
-                            profiles[team_id][user_id] = {
-                                                    "name": res["user"]["name"], 
-                                                    #"profile": res["user"]["profile"], 
-                                                    "tz": res["user"]["tz"],
-                                                    "is_bot": res["user"]["is_bot"],
-                                                    "real_name": res["user"]["real_name"],
-                                                    "tz_offset": res["user"]["tz_offset"],
-                                                    "tz_label": res["user"]["tz_label"],
-                                                    }
-                        data.update(profiles[team_id][user_id])
-                        print('profiles: ', profiles)
-                        #data["name"] = profiles[team_id][user_id]["name"]
-                        #data["tz"] = profiles[team_id][user_id]["tz"]
-                        #data["profile"] = profiles[team_id][user_id]["profile"]
-                #elif data["type"] == "presence_change":
-                else:
-                    if debug:
-                        print(data) # print data to stdout about any other events 
-            except:
-                print("Parsing of message data didn't quite work as expected")
-                print(traceback.print_exc())
             function_name = "process_" + data["type"]
             dbg("got {}".format(function_name))
             for plugin in self.bot_plugins:
                 plugin.register_jobs()
                 plugin.do(function_name, data)
+
 
     def output(self):
         for plugin in self.bot_plugins:
@@ -107,10 +72,7 @@ class RtmBot(object):
                     if limiter == True:
                         time.sleep(.1)
                         limiter = False
-                    #message = output[1].encode('ascii','ignore')
-                    #message = output[1].encode('utf8')
                     message = output[1]
-                    #channel.send_message("{}".format(message.decode('ascii')))
                     channel.send_message("{}".format(message))
                     limiter = True
 

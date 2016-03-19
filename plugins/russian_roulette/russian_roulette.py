@@ -5,11 +5,11 @@
 
 from slackclient import SlackClient
 from configparser import ConfigParser
-import os
+from os import path
 from random import choice
 
 parser = ConfigParser()
-parser.read(os.path.dirname(os.path.realpath(__file__)) + '/russian_roulette.conf')
+parser.read(path.dirname(path.realpath(__file__)) + '/russian_roulette.conf')
 token = parser.get('slack', 'top-secret-user-token')
 
 def process_message(data):
