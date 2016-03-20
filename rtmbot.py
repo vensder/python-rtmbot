@@ -56,6 +56,40 @@ class RtmBot(object):
 
     def input(self, data):
         if "type" in data:
+            try:
+                if data["type"] == "message":
+                    if "team" in data and "user" in data:
+                        team_id = data["team"]
+                        user_id = data["user"]
+                        if team_id not in profiles:
+                            profiles[team_id] = dict()
+                        if user_id not in profiles[team_id]:
+                            json_res = json.dumps(self.slack_client.api_call("users.info", user=data["user"]), ensure_ascii=False)
+                            
+                            if debug:
+                                print(type(json_res))
+                                print(json_res)
+                                print(' ^^^ Try to get json.dumps of user info ^^^ ')
+                            
+                            res = json.loads(json_res)
+                            profiles[team_id][user_id] = {
+                                                    "name": res["user"]["name"], 
+                                                    "tz": res["user"]["tz"],
+                                                    "is_bot": res["user"]["is_bot"],
+                                                    "real_name": res["user"]["real_name"],
+                                                    "tz_offset": res["user"]["tz_offset"],
+                                                    "tz_label": res["user"]["tz_label"],
+                                                    }
+                        data.update(profiles[team_id][user_id])
+                        print('profiles: ', profiles)
+
+                else:
+                    if debug:
+                        print(data) # print data to stdout about any other events 
+            except:
+                print("Parsing of message data didn't quite work as expected")
+                print(traceback.print_exc())
+            
             function_name = "process_" + data["type"]
             dbg("got {}".format(function_name))
             for plugin in self.bot_plugins:
