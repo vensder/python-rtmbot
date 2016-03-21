@@ -1,0 +1,4 @@
+DEBUG: True
+LOGFILE: logfile.log
+DAEMON: False
+SLACK_TOKEN: "xoxb-11111111111-a2BBBccDDDDDeee3ffffffff"
