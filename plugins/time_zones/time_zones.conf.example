@@ -1,0 +1,8 @@
+# time_zones.conf
+
+[time_zones]
+# default time zone
+default: US/Eastern
+
+# set of time zones
+set: America/New_York Europe/Minsk

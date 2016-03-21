@@ -1,0 +1,19 @@
+[bot]
+# telegram bot token
+# fake token, only for exapmle:
+token: bot123456789:ABC5deFgHij_k1lMn_1OPqA2BCdEf3dE3DD
+
+[user]
+# personal chat id
+#telegram-id: 12345676
+# group chat id
+telegram-id: -123456789
+
+# slack user id
+slack-id: U0DDD11DD
+
+# slack user name
+slack-name: joe
+
+[plugin]
+debug: True

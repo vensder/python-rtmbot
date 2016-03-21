@@ -1,0 +1,4 @@
+[slack]
+# slack user token
+top-secret-user-token: xoxp-11111111111-22222222222-33333333333-aabb444444
+
