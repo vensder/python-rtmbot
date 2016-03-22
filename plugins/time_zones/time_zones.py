@@ -43,9 +43,16 @@ def time_parsing(user_string,tz):
             elif 2 < len(word) <= 4:
                 word = word.lower()
                 if 'pm' in word:
-                    return('{:0>2}'.format(word.split('pm')[0]) + 'pm')
+                    hh = word.split('pm')[0]
+                    if hh.isnumeric():
+                         if int(hh) <= 12:
+                             return('{:0>2}'.format(hh) + 'pm')
+                             
                 elif 'am' in word:
-                    return('{:0>2}'.format(word.split('am')[0]) + 'am')
+                    hh = word.split('am')[0]
+                    if hh.isnumeric():
+                         if int(hh) <= 12:
+                             return('{:0>2}'.format(hh) + 'am')
     
     return(arrow.now(tz).format('HH:mm'))
 
