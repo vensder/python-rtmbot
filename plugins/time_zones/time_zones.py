@@ -18,6 +18,9 @@ tz = parser.get('time_zones', 'default')
 timezone_set = set(parser.get('time_zones', 'set').split())
 
 def time_parsing(user_string,tz):
+    'return time in string, using hh:mm format'
+    splitted_string = user_string.split()
+    
     for word in user_string.split():
         if ':' in (word):
             hhmm = word.split(':')
@@ -28,6 +31,13 @@ def time_parsing(user_string,tz):
                     mm = int(mm)
                     if hh <= 24 and mm <= 60:
                         return(word)
+
+        elif 'pm' in word or 'PM' in word or 'am' in word or 'AM' in word:
+            hh = splitted_string[splitted_string.index(word) - 1]
+            if len(hh) <= 2:
+                if hh.isnumeric():
+                    if int(hh) <= 12:
+                        return('{:0>2}'.format(hh) + word.lower())
     
     return(arrow.now(tz).format('HH:mm'))
 
@@ -47,14 +57,18 @@ def process_message(data):
                 timezone_user = {tz} # convert user's timezone to set'
                 timezonelist = list(timezone_set | timezone_user) # add user's timezone to set of main Time Zones'
                 timezonelist.sort() # sort list of time zones
-                time_string = time_parsing(text, tz)
-                #print(time_string)
-                
-                local_time = arrow.get(datetime.now(), tz)
-                string_time = local_time.format('YYYY-MM-DD') + ' ' + time_string + local_time.format(':ss ZZ')
-                my_time = arrow.get(string_time, 'YYYY-MM-DD HH:mm:ss ZZ')
-                #print(type(my_time))
 
+                time_string = time_parsing(text, tz)
+                local_time = arrow.get(datetime.now(), tz)
+                
+                if 'am' in time_string or 'pm' in time_string:
+                    formatted_time = local_time.format('YYYY-MM-DD') + ' ' + time_string + local_time.format(' ZZ')
+                    my_time = arrow.get(formatted_time, 'YYYY-MM-DD hha ZZ')
+
+                else:
+                    formatted_time = local_time.format('YYYY-MM-DD') + ' ' + time_string + local_time.format(':ss ZZ')
+                    my_time = arrow.get(formatted_time, 'YYYY-MM-DD HH:mm:ss ZZ')
+                
                 output_message = ''
                 for zone in timezonelist:
                     zone_time = my_time.to(zone)
