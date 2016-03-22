@@ -1,0 +1,10 @@
+[jenkins]
+JENKINS_URL: https://jenkins.example.com
+
+[job1]
+JOB_NAME: deploy_test
+JOB_TOKEN: 11112222aaaabbbb33334444ccccddddeeee
+TRIGGER_PHRASE = @jenkins test
+
+SLACK_CHANNEL: C0111DDD
+SLACK_USERS: joe bill

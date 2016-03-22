@@ -18,7 +18,7 @@ tz = parser.get('time_zones', 'default')
 timezone_set = set(parser.get('time_zones', 'set').split())
 
 def time_parsing(user_string,tz):
-    'return time in string, using hh:mm format'
+    'return time in string, using hh:mm format or hh am (pm)'
     splitted_string = user_string.split()
     
     for word in user_string.split(): # for hh:mm format
