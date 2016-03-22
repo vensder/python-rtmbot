@@ -21,7 +21,7 @@ def time_parsing(user_string,tz):
     'return time in string, using hh:mm format'
     splitted_string = user_string.split()
     
-    for word in user_string.split():
+    for word in user_string.split(): # for hh:mm format
         if ':' in (word):
             hhmm = word.split(':')
             if len(hhmm) == 2:
@@ -32,12 +32,20 @@ def time_parsing(user_string,tz):
                     if hh <= 24 and mm <= 60:
                         return(word)
 
-        elif 'pm' in word or 'PM' in word or 'am' in word or 'AM' in word:
-            hh = splitted_string[splitted_string.index(word) - 1]
-            if len(hh) <= 2:
-                if hh.isnumeric():
-                    if int(hh) <= 12:
-                        return('{:0>2}'.format(hh) + word.lower())
+        elif 'pm' in word or 'PM' in word or 'am' in word or 'AM' in word: # for hh am, hh pm format
+            if len(word) == 2:
+                hh = splitted_string[splitted_string.index(word) - 1]
+                if len(hh) <= 2:
+                    if hh.isnumeric():
+                        if int(hh) <= 12:
+                            return('{:0>2}'.format(hh) + word.lower())
+            
+            elif 2 < len(word) <= 4:
+                word = word.lower()
+                if 'pm' in word:
+                    return('{:0>2}'.format(word.split('pm')[0]) + 'pm')
+                elif 'am' in word:
+                    return('{:0>2}'.format(word.split('am')[0]) + 'am')
     
     return(arrow.now(tz).format('HH:mm'))
 
