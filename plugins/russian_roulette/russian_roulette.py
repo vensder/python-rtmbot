@@ -23,7 +23,7 @@ def process_message(data):
                 sc = SlackClient(token)
                 chan = data['channel']
                 shot = '<@' + data['user'] + '>' + choice(['++','--'])
-                print(sc.api_call("chat.postMessage", as_user="true:", channel=chan, text=shot))
+                print(sc.api_call("chat.postMessage", as_user="true", channel=chan, text=shot))
                 del sc
 
         except KeyError:

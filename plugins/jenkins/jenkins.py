@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from slackclient import SlackClient
 from configparser import ConfigParser
 from os import path
 import requests
@@ -9,7 +10,7 @@ parser = ConfigParser()
 parser.read(path.dirname(path.realpath(__file__)) + '/jenkins.conf')
 
 JENKINS_URL = parser.get('jenkins', 'JENKINS_URL')
-
+SLACK_BOT_TOKEN = parser.get('jenkins', 'SLACK_BOT_TOKEN')
 
 # first job job1
 JOB_NAME = parser.get('job1', 'JOB_NAME')
@@ -24,11 +25,12 @@ def process_message(data):
     if 'text' in data:
         try:
             text = data['text']
-            channel = data['channel']
+            chan = data['channel']
             user = data['name']
             print(SLACK_USERS)
 
-            if TRIGGER_PHRASE in text and channel == SLACK_CHANNEL:
+            if TRIGGER_PHRASE in text and chan == SLACK_CHANNEL:
+                sc = SlackClient(SLACK_BOT_TOKEN)
                 if user in SLACK_USERS:
                     print(user)
                     print(text)
@@ -39,10 +41,13 @@ def process_message(data):
                     
                     output_message = 'Jenkins job "' + JOB_NAME + '" started by ' + user + '\n'
                     output_message += 'Status code: ' + str(status_code)
-                    
-                    outputs.append([data['channel'], output_message])
+                    print(sc.api_call("chat.postMessage", as_user="false", icon_emoji=":bowtie:", channel=chan, text=output_message))
+                    #outputs.append([data['channel'], output_message])
                 else:
-                    outputs.append([data['channel'], 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('])
+                    output_message = 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('
+                    print(sc.api_call("chat.postMessage", as_user="false", icon_emoji=":trollface:", channel=chan, text=output_message))
+                    #outputs.append([data['channel'], 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('])
+                del sc
                 
         except KeyError:
             print('KeyError Exception')

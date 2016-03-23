@@ -1,5 +1,7 @@
 [jenkins]
 JENKINS_URL: https://jenkins.example.com
+SLACK_BOT_TOKEN: xoxb-11111111111-222222ccccccccccDDDDDDDD
+
 
 [job1]
 JOB_NAME: deploy_test
