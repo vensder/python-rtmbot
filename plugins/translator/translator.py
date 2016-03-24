@@ -31,5 +31,21 @@ def process_message(data):
                 except:
                     outputs.append([data['channel'], 'Something go wrong' ])
 
+            if 'переведи это' in text or 'Переведи это' in text:
+                translate = YandexTranslate(token)
+                phrase_to_translate = text.lstrip('Ппервди это').lstrip(': ')
+                
+                try:
+                    translate_dict = translate.translate(phrase_to_translate, 'ru-en')
+                    if translate_dict['code'] == 200:
+                        translate = translate_dict['text'][0]
+                        outputs.append([data['channel'], translate ])
+                    else:
+                        outputs.append([data['channel'], 'Code: ' + translate_dict['code'] ])
+                except:
+                    outputs.append([data['channel'], 'Something go wrong' ])
+
+
+
         except KeyError:
             print('KeyError Exception')
