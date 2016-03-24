@@ -30,7 +30,8 @@ def time_parsing(user_string,tz):
                     hh = int(hh)
                     mm = int(mm)
                     if hh <= 24 and mm <= 60:
-                        return(word)
+                        #return(word)
+                        return('{:0>2}'.format(hh) + ':' + '{:0>2}'.format(mm))
 
         elif 'pm' in word or 'PM' in word or 'am' in word or 'AM' in word: # for hh am, hh pm format
             if len(word) == 2:
@@ -78,11 +79,17 @@ def process_message(data):
                 
                 if 'am' in time_string or 'pm' in time_string:
                     formatted_time = local_time.format('YYYY-MM-DD') + ' ' + time_string + local_time.format(' ZZ')
-                    my_time = arrow.get(formatted_time, 'YYYY-MM-DD hha ZZ')
+                    try:
+                        my_time = arrow.get(formatted_time, 'YYYY-MM-DD hha ZZ')
+                    except:
+                        my_time = arrow.now(tz) #.format('hha')
 
                 else:
                     formatted_time = local_time.format('YYYY-MM-DD') + ' ' + time_string + local_time.format(':ss ZZ')
-                    my_time = arrow.get(formatted_time, 'YYYY-MM-DD HH:mm:ss ZZ')
+                    try:
+                        my_time = arrow.get(formatted_time, 'YYYY-MM-DD HH:mm:ss ZZ')
+                    except:
+                        my_time = arrow.now(tz) #.format('HH:mm')
                 
                 output_message = ''
                 for zone in timezonelist:
