@@ -18,6 +18,7 @@ SLACK_BOT_TOKEN = parser.get('jenkins', 'SLACK_BOT_TOKEN')
 JOB_NAME = parser.get('job1', 'JOB_NAME')
 JOB_TOKEN = parser.get('job1', 'JOB_TOKEN')
 TRIGGER_PHRASE = parser.get('job1', 'TRIGGER_PHRASE')
+TRIGGER_PHRASE_TO_RUN = parser.get('job1', 'TRIGGER_PHRASE_TO_RUN')
 
 SLACK_CHANNEL = parser.get('job1', 'SLACK_CHANNEL')
 SLACK_USERS = parser.get('job1', 'SLACK_USERS').split()
@@ -30,18 +31,33 @@ def process_message(data):
             chan = data['channel']
             user = data['name']
             print(SLACK_USERS)
-
+            
             if TRIGGER_PHRASE in text and chan == SLACK_CHANNEL:
+
+                if not TRIGGER_PHRASE_TO_RUN in text:
+                    DRY_RUN = 'True'
+                    outputs.append([data['channel'], 'If you want to deploy dxscript to production, try this: ```' + TRIGGER_PHRASE_TO_RUN + '```'])
+
+                elif TRIGGER_PHRASE_TO_RUN in text:
+                    DRY_RUN = 'False'
+
                 sc = SlackClient(SLACK_BOT_TOKEN)
+
                 if user in SLACK_USERS:
                     print(user)
                     print(text)
-                    r = requests.get(JENKINS_URL + '/buildByToken/build?job=' + JOB_NAME + '&token=' + JOB_TOKEN)
+                    r = requests.get(JENKINS_URL \
+                                        + '/buildByToken/buildWithParameters?job=' + JOB_NAME \
+                                        + '&token=' + JOB_TOKEN \
+                                        + '&DRY_RUN=' + DRY_RUN)
+                    
+                    #r = requests.get(JENKINS_URL + '/buildByToken/buildWithParameters?job=' + JOB_NAME + '&token=' + JOB_TOKEN)
                     status_code = r.status_code
                     print('status code: ', status_code)
                     print('headers: ', r.headers)
                     
                     output_message = 'Jenkins job "' + JOB_NAME + '" started by ' + user + '\n'
+                    output_message += 'DRY RUN: ' + DRY_RUN + '\n'
                     output_message += 'Status code: ' + str(status_code)
                     print(sc.api_call("chat.postMessage", as_user="false", icon_emoji=":bowtie:", channel=chan, text=output_message))
                     #outputs.append([data['channel'], output_message])
