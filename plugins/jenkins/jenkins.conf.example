@@ -7,6 +7,17 @@ SLACK_BOT_TOKEN: xoxb-11111111111-222222ccccccccccDDDDDDDD
 JOB_NAME: deploy_test
 JOB_TOKEN: 11112222aaaabbbb33334444ccccddddeeee
 TRIGGER_PHRASE = @jenkins test
+TRIGGER_PHRASE_TO_RUN: @jenkins test on production
+
+SLACK_CHANNEL: C0111DDD
+SLACK_USERS: joe bill
+
+[job2]
+JOB_NAME: job2_name_in_jenkins
+JOB_TOKEN:11112222aaaabbbb33334444ccccddddeeee
+
+TRIGGER_PHRASE: cleanup volumes on checkin
+TRIGGER_PHRASE_TO_RUN: cleanup volumes on checkin-build slave
 
 SLACK_CHANNEL: C0111DDD
 SLACK_USERS: joe bill
