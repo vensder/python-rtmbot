@@ -4,11 +4,10 @@
 import http.client
 from configparser import ConfigParser
 from urllib.parse import urlencode
-
-import os
+from os import path
 
 parser = ConfigParser()
-parser.read(os.path.dirname(os.path.realpath(__file__)) + '/telegram.conf')
+parser.read(path.dirname(path.realpath(__file__)) + '/telegram.conf')
 
 token = parser.get('bot', 'token')
 telegram_chat = parser.get('user', 'telegram-id')
