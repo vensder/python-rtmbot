@@ -6,6 +6,8 @@ from configparser import ConfigParser
 from os import path
 import requests
 
+outputs = []
+
 parser = ConfigParser()
 parser.read(path.dirname(path.realpath(__file__)) + '/jenkins.conf')
 

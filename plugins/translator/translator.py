@@ -5,6 +5,8 @@ from configparser import ConfigParser
 from yandex_translate import YandexTranslate
 from os import path
 
+outputs = []
+
 parser = ConfigParser()
 parser.read(path.dirname(path.realpath(__file__)) + '/translator.conf')
 
