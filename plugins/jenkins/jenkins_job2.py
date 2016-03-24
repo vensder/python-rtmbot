@@ -36,7 +36,7 @@ def process_message(data):
 
                 if not TRIGGER_PHRASE_TO_RUN in text:
                     DRY_RUN = 'True'
-                    outputs.append([data['channel'], 'If you want to ' + TRIGGER_PHRASE_TO_RUN + ', try this: ```' + TRIGGER_PHRASE_TO_RUN + '```'])
+                    outputs.append([data['channel'], 'If you want to ' + TRIGGER_PHRASE_TO_RUN.lstrip('@') + ', try this: ```' + TRIGGER_PHRASE_TO_RUN + '```'])
 
                 elif TRIGGER_PHRASE_TO_RUN in text:
                     DRY_RUN = 'False'
