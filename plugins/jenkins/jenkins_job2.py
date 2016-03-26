@@ -24,7 +24,7 @@ SLACK_CHANNEL = parser.get('job2', 'SLACK_CHANNEL')
 SLACK_USERS = parser.get('job2', 'SLACK_USERS').split()
 
 def process_message(data):
-    
+    print("jenkins_job2: " + str(data))
     if 'text' in data:
         try:
             text = data['text']
@@ -67,6 +67,6 @@ def process_message(data):
                     #outputs.append([data['channel'], 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('])
                 del sc
                 
-        except KeyError:
-            print('KeyError Exception')
+        except KeyError as e:
+            print('KeyError Exception: ', e)
 

@@ -27,7 +27,7 @@ def process_message(data):
                     translate_dict = translate.translate(phrase_to_translate, 'en-ru')
                     if translate_dict['code'] == 200:
                         translate = translate_dict['text'][0]
-                        outputs.append([data['channel'], translate ])
+                        outputs.append([data['channel'], translate, 'Translator', ':flag-ru:',])
                     else:
                         outputs.append([data['channel'], 'Code: ' + translate_dict['code'] ])
                 except:
@@ -41,12 +41,11 @@ def process_message(data):
                     translate_dict = translate.translate(phrase_to_translate, 'ru-en')
                     if translate_dict['code'] == 200:
                         translate = translate_dict['text'][0]
-                        outputs.append([data['channel'], translate ])
+                        outputs.append([data['channel'], translate, 'Translator', ':flag-us:',])
                     else:
                         outputs.append([data['channel'], 'Code: ' + translate_dict['code'] ])
                 except:
                     outputs.append([data['channel'], 'Something go wrong' ])
-
 
 
         except KeyError:

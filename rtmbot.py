@@ -16,11 +16,41 @@ import traceback
 #import arrow
 
 from slackclient import SlackClient
+from slackclient._channel import Channel
 
 
 def dbg(debug_string):
     if debug:
         logging.info(debug_string)
+
+
+
+class MySlackClient (SlackClient):
+    pass
+
+
+class MyChannel(Channel):
+    
+    def post_message(self, message, username, emoji):
+        
+        as_user = 'false'
+        
+        if username == '' and emoji == '':
+            as_user = 'true'
+
+        message_json = {
+                    "channel": self.id, 
+                    "text": message, 
+                    "username": username, 
+                    "as_user": as_user,
+                    "icon_url": '',
+                    "icon_emoji": emoji
+                    }
+
+        if debug:
+            print('MESSAGE JSON:  ', message_json)
+        
+        self.server.api_call("chat.postMessage", **message_json)
 
 
 class RtmBot(object):
@@ -33,7 +63,7 @@ class RtmBot(object):
 
     def connect(self):
         """Convenience method that creates Server instance"""
-        self.slack_client = SlackClient(self.token)
+        self.slack_client = MySlackClient(self.token)
         self.slack_client.rtm_connect()
 
     def start(self):
@@ -57,22 +87,29 @@ class RtmBot(object):
     def input(self, data):
         if "type" in data:
             try:
+                print("input: " + str(data))
                 if data["type"] == "message":
-                    if "team" in data and "user" in data:
-                        team_id = data["team"]
+                    #if "team" in data and "user" in data:
+                    if "user" in data:
+                        #team_id = data["team"]
+                        #team_id = 'rtmbot'
                         user_id = data["user"]
-                        if team_id not in profiles:
-                            profiles[team_id] = dict()
-                        if user_id not in profiles[team_id]:
+                        #if team_id not in profiles:
+                        #if 'rtmbot' not in profiles:
+                            #profiles[team_id] = dict()
+                            #profiles['rtmbot'] = dict()
+                        if user_id not in profiles: #[team_id]:
                             json_res = json.dumps(self.slack_client.api_call("users.info", user=data["user"]), ensure_ascii=False)
                             
                             if debug:
+                                print(data)
                                 print(type(json_res))
                                 print(json_res)
                                 print(' ^^^ Try to get json.dumps of user info ^^^ ')
                             
                             res = json.loads(json_res)
-                            profiles[team_id][user_id] = {
+                            #profiles[team_id][user_id] = {
+                            profiles[user_id] = {
                                                     "name": res["user"]["name"], 
                                                     "tz": res["user"]["tz"],
                                                     "is_bot": res["user"]["is_bot"],
@@ -80,7 +117,8 @@ class RtmBot(object):
                                                     "tz_offset": res["user"]["tz_offset"],
                                                     "tz_label": res["user"]["tz_label"],
                                                     }
-                        data.update(profiles[team_id][user_id])
+                        #data.update(profiles[team_id][user_id])
+                        data.update(profiles[user_id])
                         print('profiles: ', profiles)
 
                 else:
@@ -107,7 +145,16 @@ class RtmBot(object):
                         time.sleep(.1)
                         limiter = False
                     message = output[1]
-                    channel.send_message("{}".format(message))
+                    if len(output) > 3:
+                        username = output[2]
+                        emoji = output[3]
+                    else:
+                        username = ''
+                        emoji = ''
+                    channel.__class__ = MyChannel
+                    #channel.send_message("{}".format(message)) # send message to channel
+                    channel.post_message("{}".format(message), username, emoji)
+                    channel.__class__ = Channel
                     limiter = True
 
     def crons(self):
@@ -115,6 +162,7 @@ class RtmBot(object):
             plugin.do_jobs()
 
     def load_plugins(self):
+        time.sleep(1)
         for plugin in glob.glob(directory+'/plugins/*'):
             sys.path.insert(0, plugin)
             sys.path.insert(0, directory+'/plugins/')

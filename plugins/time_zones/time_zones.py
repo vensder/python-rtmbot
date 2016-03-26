@@ -100,7 +100,7 @@ def process_message(data):
                         your_tz = ' <- Your timezone'
                     output_message += hhmm_time + ' (' + zone + ')' + your_tz + '\n'
                 
-                outputs.append([data['channel'], output_message])
+                outputs.append([data['channel'], output_message]) # , 'TimeBot'
 
         except KeyError:
             print('KeyError Exception')

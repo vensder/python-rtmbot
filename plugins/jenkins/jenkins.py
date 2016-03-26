@@ -67,6 +67,7 @@ def process_message(data):
                     #outputs.append([data['channel'], 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('])
                 del sc
                 
-        except KeyError:
-            print('KeyError Exception')
+        except KeyError as e:
+            print('KeyError Exception: ', e)
+            print(data)
 

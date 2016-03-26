@@ -17,6 +17,19 @@ def process_message(data):
 '''
 #./rtmbot.py
 
+# from bots:
+{'ts': '1459003857.000125', 
+'subtype': 'bot_message', 
+'text': 'Hello from Python! :tada:', 
+'username': 'pybot', 
+'type': 'message', 
+'channel': 'C0DEMSUG5', 
+'bot_id': 'B0QLWMTQD', 
+'icons': {'image_64': 'https://slack.global.ssl.fastly.net/d4bf/img/emoji_2015_2/apple/1f916.png', 'emoji': ':robot_face:'}}
+
+
+
+
 #BEGIN PROCESS MESSAGE
 data:  {'text': 'bot started at @time: Fri, 11 Mar 2016 12:24', 
         'reply_to': None, 
