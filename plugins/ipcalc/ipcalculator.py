@@ -11,16 +11,24 @@ def process_message(data):
         try:
             text = data['text']
             channel = data['channel']
+            except_phrase = 'Try something like this: ```@ipcalc 10.0.0.0/24```'
 
-            if 'ipcalc' in text:
+            if '@ipcalc' in text and except_phrase not in text:
+                
                 output_string = ''
-                network = ipcalc.Network('10.0.0.100/24')
-                network_string = text.lstrip('ipcalc ') #text.lstrip('ipcalc ').strip('abcdefghijklmnopqrstuvwxyz ')
+                emoji = ':spider_web:'
+                except_emoji = ':exclamation:'
+                bot_name = 'ip calculator'
+                
+                network = ipcalc.Network('10.0.0.0/24')
+                network_string = text.strip(' @ipcalc ') #text.lstrip('ipcalc ').strip('abcdefghijklmnopqrstuvwxyz ')
                 
                 try:
                     network = ipcalc.Network(network_string)
-                except:
-                    outputs.append([data['channel'], 'Try something like: ```ipcalc 10.0.0.100/24``` or ```ipcalc 172.16.0.0/16```' ])
+                except Exception as e:
+                    outputs.append([data['channel'], str(e) + '. ' + except_phrase, bot_name, except_emoji ])
+                    print('Exception in ipcalculator: ', e)
+                    print('network: ', network_string)
                 
                 try:
                     output_string += '```'
@@ -32,11 +40,14 @@ def process_message(data):
                     output_string += str(network.info()) + ' (network type)\n' # 'PRIVATE'
                     output_string += '```'
 
-                    outputs.append([data['channel'], output_string ])
+                    outputs.append([data['channel'], output_string, bot_name, emoji ])
 
-                except:
-                    outputs.append([data['channel'], 'Try something like 10.0.0.100/24 or 172.16.0.0/16' ])
+                except Exception as e:
+                    outputs.append([data['channel'], str(e) + '. ' + except_phrase, bot_name, except_emoji ])
+                    print('Exception in ipcalculator: ',e)
+                    print('network: ', network_string)
 
 
-        except KeyError:
-            print('KeyError Exception')
+        except KeyError as e:
+            print('KeyError Exception in ipcalculator.py: ', e)
+            print(data)
