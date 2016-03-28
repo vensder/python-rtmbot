@@ -64,7 +64,8 @@ def process_message(data):
                         outputs.append([channel, output_string, 'SSL checker', emoji ])
                         
                     except Exception as e:
-                        outputs.append([data['channel'], str(e) + ': ' + domain ])
+                        emoji = ':exclamation:'
+                        outputs.append([data['channel'], str(e) + ': ' + domain, 'SSL checker', emoji ])
                         print('Exception in ssl plugin: ',e)
                         print('network: ', domain)
                         
