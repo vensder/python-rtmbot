@@ -55,9 +55,13 @@ def process_message(data):
                         expiry_datetime = ssl_expiry_datetime(domain)
                         now = datetime.datetime.now()
                         delta = expiry_datetime - now
+                        
+                        emoji = ':white_check_mark:'
+                        if delta.days < 20:
+                            emoji = ':warning:'
                         output_string = 'Certificate for domain ' + domain + ' will expire in ' + str(delta.days) + ' days (' + str(expiry_datetime) + ')'
                         print(output_string)
-                        outputs.append([channel, output_string ])
+                        outputs.append([channel, output_string, 'SSL checker', emoji ])
                         
                     except Exception as e:
                         outputs.append([data['channel'], str(e) + ': ' + domain ])
