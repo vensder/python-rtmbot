@@ -57,7 +57,7 @@ def process_message(data):
                         delta = expiry_datetime - now
                         
                         emoji = ':white_check_mark:'
-                        if delta.days < 20:
+                        if delta.days < 30:
                             emoji = ':warning:'
                         output_string = 'Certificate for domain ' + domain + ' will expire in ' + str(delta.days) + ' days (' + str(expiry_datetime) + ')'
                         print(output_string)
