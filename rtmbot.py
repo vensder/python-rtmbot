@@ -24,7 +24,6 @@ def dbg(debug_string):
         logging.info(debug_string)
 
 
-
 class MySlackClient (SlackClient):
     pass
 
