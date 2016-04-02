@@ -20,9 +20,9 @@ def process_message(data):
             channel = data['channel']
             detected_lang = 'en' #default lang
 
-            if '@translate' in text:
+            if '@tr' in text:
                 translate = YandexTranslate(token)
-                phrase_to_translate = text.replace('@translate', '').strip()
+                phrase_to_translate = text.replace('@translate', '').replace('@tr', '').strip()
                 print('phrase_to_translate: ', phrase_to_translate)
 
                 if phrase_to_translate != '':
