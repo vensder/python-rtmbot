@@ -21,12 +21,12 @@ def process_message(data):
                 bot_name = 'ip calculator'
                 
                 network = ipcalc.Network('10.0.0.0/24')
-                network_string = text.strip(' @ipcalc ') #text.lstrip('ipcalc ').strip('abcdefghijklmnopqrstuvwxyz ')
+                network_string = text.replace('@ipcalc', '').strip() #text.lstrip('ipcalc ').strip('abcdefghijklmnopqrstuvwxyz ')
                 
                 try:
                     network = ipcalc.Network(network_string)
                 except Exception as e:
-                    outputs.append([data['channel'], str(e) + '. ' + except_phrase, bot_name, except_emoji ])
+                    outputs.append([channel, str(e) + '. ' + except_phrase, bot_name, except_emoji ])
                     print('Exception in ipcalculator: ', e)
                     print('network: ', network_string)
                 
@@ -40,10 +40,10 @@ def process_message(data):
                     output_string += str(network.info()) + ' (network type)\n' # 'PRIVATE'
                     output_string += '```'
 
-                    outputs.append([data['channel'], output_string, bot_name, emoji ])
+                    outputs.append([channel, output_string, bot_name, emoji ])
 
                 except Exception as e:
-                    outputs.append([data['channel'], str(e) + '. ' + except_phrase, bot_name, except_emoji ])
+                    outputs.append([channel, str(e) + '. ' + except_phrase, bot_name, except_emoji ])
                     print('Exception in ipcalculator: ',e)
                     print('network: ', network_string)
 
