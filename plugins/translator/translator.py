@@ -48,7 +48,7 @@ def process_message(data):
                             translate_dict = translate.translate(phrase_to_translate, direction)
                             if translate_dict['code'] == 200:
                                 translation = translate_dict['text'][0]
-                                outputs.append([channel, flag_from + ':flag-ru:' + ' ' + translation, 'Translator', ':flag-ru:'])
+                                outputs.append([channel, ':flag-ru:' + ' ' + translation, 'Translator', flag_from])
                             else:
                                 outputs.append([channel, 'Code: ' + translate_dict['code']])
                         except:
