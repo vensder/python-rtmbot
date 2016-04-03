@@ -107,3 +107,145 @@ def process_message(data):
 
         except KeyError:
             print('KeyError Exception')
+
+
+if __name__ == '__main__':
+
+    '''Some tests for plugin function'''
+
+    import unittest
+
+    time_zone = 'Europe/Moscow'
+
+    print(time_parsing('a sadfk kasdfl kjasdf 23:24', time_zone))
+    print(time_parsing('a sadfk kasdfl kjasdf 01 am', time_zone))
+    print(time_parsing('a sadfk kasdfl kjasdf 11 PM', time_zone)) # s.split()[s.split().index('pm')-1]
+    print(time_parsing('a sadfk kasdfl kjasdf 12pm', time_zone))
+    print(time_parsing('a sadfk kasdfl kjasdf 8AM', time_zone))
+    print(time_parsing('a sadfk kasdfl kjasdf 14 PM', time_zone)) #should print current time (because wrong format)
+    print(time_parsing('a sadfk kasdfl kjasdf @time', time_zone))
+
+    class TestTimeParsing(unittest.TestCase):
+        """
+        Basic test for time parsing
+        """
+
+        def test_hhmm(self):
+            """
+            hh:mm format (like 10:23, 23:35, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 23:24'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '23:24')
+
+            user_string = 'a sadfk kasdfl kjasdf 00:01'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '00:01')
+
+        def test_hh_am(self):
+            """
+            hh am format (like 10 am, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 01 am'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '01am')
+
+
+        def test_hh_PM(self):
+            """
+            hh PM format (like 10 am, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 11 PM'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '11pm')
+
+            user_string = 'a sadfk kasdfl kjasdf 1 AM'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '01am')
+
+
+        def test_hhpm(self):
+            """
+            hhpm format (like 10pm, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 12pm'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '12pm')
+
+        def test_hAM(self):
+            """
+            hAM format (like 9AM, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 8AM'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '08am')
+
+        def test_hpM(self):
+            """
+            hpM format (like 9pM, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 9pM'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '09pm')
+
+        def test_h(self):
+            """
+            h format (like 9, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 9'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '09:00')
+
+        def test_h(self):
+            """
+            h format (like 9, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 0'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '00:00')
+
+        def test_hm(self):
+            """
+            h:m format (like 1:1, etc.)
+            """
+            user_string = 'a sadfk kasdfl kjasdf 1:1'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '01:01')
+
+            user_string = 'a sadfk kasdfl kjasdf 1:01'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '01:01')
+
+            user_string = 'a sadfk kasdfl kjasdf 01:1'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '01:01')
+
+            user_string = 'a sadfk kasdfl kjasdf 01:0'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '01:00')
+
+        def test_wrong_time(self):
+            """
+            wrong format of time (99PM) (return current time)
+            """
+            t = datetime.now()
+            time_now = '{:0>2}:{:0>2}'.format(t.hour,t.minute)
+
+            user_string = 'a sadfk kasdfl kjasdf 99PM'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, time_now)
+
+        def test_no_time(self):
+            """
+            string without time (return current time)
+            """
+            t = datetime.now()
+            time_now = '{:0>2}:{:0>2}'.format(t.hour, t.minute)
+
+            user_string = 'a sadfk kasdfl kjasdf'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, time_now)
+
+
+    unittest.main()
+
