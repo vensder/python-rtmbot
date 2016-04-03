@@ -54,6 +54,10 @@ def time_parsing(user_string,tz):
                     if hh.isnumeric():
                          if int(hh) <= 12:
                              return('{:0>2}'.format(hh) + 'am')
+
+        elif 1 <= len(word) <=2 and word.isnumeric():
+            if int(word) <= 24:
+                return('{:0>2}'.format(word) + ':00')
     
     return(arrow.now(tz).format('HH:mm'))
 
