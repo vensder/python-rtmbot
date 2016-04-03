@@ -4,13 +4,13 @@
 import arrow
 from datetime import datetime
 from configparser import ConfigParser
-import os
+from os import path
 #from pytz import timezone
 
 outputs = []
 
 parser = ConfigParser()
-parser.read(os.path.dirname(os.path.realpath(__file__)) + '/time_zones.conf')
+parser.read(path.dirname(path.realpath(__file__)) + '/time_zones.conf')
 
 # set default Time Zone
 tz = parser.get('time_zones', 'default')
@@ -19,9 +19,9 @@ timezone_set = set(parser.get('time_zones', 'set').split())
 
 def time_parsing(user_string,tz):
     'return time in string, using hh:mm format or hh am (pm)'
-    splitted_string = user_string.split()
+    splitted_string = user_string.lower().split()
     
-    for word in user_string.split(): # for hh:mm format
+    for word in splitted_string: # for hh:mm format (12:23)
         if ':' in (word):
             hhmm = word.split(':')
             if len(hhmm) == 2:
@@ -33,7 +33,7 @@ def time_parsing(user_string,tz):
                         #return(word)
                         return('{:0>2}'.format(hh) + ':' + '{:0>2}'.format(mm))
 
-        elif 'pm' in word or 'PM' in word or 'am' in word or 'AM' in word: # for hh am, hh pm format
+        elif 'pm' in word or 'am' in word: # for hh am, hh pm format (10 am, 9 pm)
             if len(word) == 2:
                 hh = splitted_string[splitted_string.index(word) - 1]
                 if len(hh) <= 2:
@@ -41,7 +41,7 @@ def time_parsing(user_string,tz):
                         if int(hh) <= 12:
                             return('{:0>2}'.format(hh) + word.lower())
             
-            elif 2 < len(word) <= 4:
+            elif 2 < len(word) <= 4: # for hpm ham (1pm, 10am, etc.)
                 word = word.lower()
                 if 'pm' in word:
                     hh = word.split('pm')[0]
@@ -55,8 +55,7 @@ def time_parsing(user_string,tz):
                          if int(hh) <= 12:
                              return('{:0>2}'.format(hh) + 'am')
 
-        elif 1 <= len(word) <=2 and word.isnumeric():
-            if int(word) <= 24:
+        elif word.isnumeric() and int(word) <= 23 and not ('pm' in splitted_string or 'am' in splitted_string):
                 return('{:0>2}'.format(word) + ':00')
     
     return(arrow.now(tz).format('HH:mm'))
@@ -104,10 +103,7 @@ def process_message(data):
                         your_tz = ' <- Your timezone'
                     output_message += hhmm_time + ' (' + zone + ')' + your_tz + '\n'
                 
-                outputs.append([data['channel'], output_message]) # , 'TimeBot'
+                outputs.append([channel, output_message]) # , 'TimeBot'
 
         except KeyError:
             print('KeyError Exception')
-
-
-
