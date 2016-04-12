@@ -20,6 +20,7 @@ def process_message(data):
             channel = data['channel']
 
             if 'russian roulette' in text:
+                raise ValueError('Raise My error from russian roulette')
                 sc = SlackClient(token)
                 chan = data['channel']
                 shot = '<@' + data['user'] + '>' + choice(['++','--'])

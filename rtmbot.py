@@ -13,7 +13,6 @@ import time
 import logging
 from argparse import ArgumentParser
 import traceback
-#import arrow
 
 from slackclient import SlackClient
 from slackclient._channel import Channel
@@ -65,16 +64,26 @@ class RtmBot(object):
         self.slack_client = MySlackClient(self.token)
         self.slack_client.rtm_connect()
 
+    def reconnect(self):
+        del self.slack_client
+        self.slack_client = MySlackClient(self.token)
+        self.slack_client.rtm_connect()
+
     def start(self):
         self.connect()
         self.load_plugins()
         while True:
-            for reply in self.slack_client.rtm_read():
-                self.input(reply)
-            self.crons()
-            self.output()
-            self.autoping()
-            time.sleep(.1)
+            try:
+                for reply in self.slack_client.rtm_read():
+                    self.input(reply)
+                self.crons()
+                self.output()
+                self.autoping()
+                time.sleep(.1)
+#            except Exception as e:
+#                print(e)
+            except (ConnectionResetError, TimeoutError):
+                self.reconnect()
 
     def autoping(self):
         #hardcode the interval to 3 seconds
