@@ -16,7 +16,7 @@ import traceback
 
 from slackclient import SlackClient
 from slackclient._channel import Channel
-
+from websocket._exceptions import WebSocketConnectionClosedException
 
 def dbg(debug_string):
     if debug:
@@ -82,7 +82,7 @@ class RtmBot(object):
                 time.sleep(.1)
 #            except Exception as e:
 #                print(e)
-            except (ConnectionResetError, TimeoutError):
+            except (ConnectionResetError, TimeoutError, WebSocketConnectionClosedException):
                 self.reconnect()
 
     def autoping(self):
