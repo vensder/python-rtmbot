@@ -40,6 +40,7 @@ def process_message(data):
             text = data['text']
             channel = data['channel']
             user = data['name']
+            print('channel: ', channel)
 
             if text.startswith('@jenkins help') and channel in slack_channels:
                 emoji = ':question:'
