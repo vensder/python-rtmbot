@@ -41,7 +41,7 @@ def process_message(data):
             channel = data['channel']
             user = data['name']
 
-            if text.startwith('@jenkins help') and channel in slack_channels:
+            if text.startswith('@jenkins help') and channel in slack_channels:
                 emoji = ':question:'
                 outputs.append([channel, help_text, 'Jenkins help', emoji])
 
