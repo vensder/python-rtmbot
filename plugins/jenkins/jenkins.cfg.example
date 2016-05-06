@@ -20,7 +20,7 @@ SLACK_USERS: username1 username2
 [job2]
 NAME: jenkins_job2_name_here
 TOKEN: qawerasdfASDFASDF
-TRIGGER: @deploy myapp staging
-HELP: Deploy custom branches on staging
+TRIGGER: @deploy myapp master staging
+HELP: Deploy master on staging
 SLACK_CHANNEL: SlACKcHAnnELC0de
 SLACK_USERS: username1 username2
