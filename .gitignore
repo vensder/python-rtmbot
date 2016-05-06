@@ -1,5 +1,6 @@
 *.pyc
 *.conf
+*.cfg
 *.log
 env
 env3
