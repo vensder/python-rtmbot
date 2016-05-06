@@ -7,21 +7,29 @@ from os import path
 import requests
 
 outputs = []
+jobs_dict = {} # dict of dicts with jobs configs
+slack_channels = set()
 
-parser = ConfigParser()
-parser.read(path.dirname(path.realpath(__file__)) + '/jenkins.conf')
+Config = ConfigParser()
+Config.read(path.dirname(path.realpath(__file__)) + '/jenkins.cfg')
+JENKINS_URL = Config.get('jenkins', 'JENKINS_URL')
 
-JENKINS_URL = parser.get('jenkins', 'JENKINS_URL')
-SLACK_BOT_TOKEN = parser.get('jenkins', 'SLACK_BOT_TOKEN')
+# collect all jobs with configs into one dict
+for section in Config.sections():
+    if 'job' in section:
+        jobs_dict[section] = dict(Config.items(section))
 
-# job0
-JOB_NAME = parser.get('job0', 'JOB_NAME')
-JOB_TOKEN = parser.get('job0', 'JOB_TOKEN')
-TRIGGER_PHRASE = parser.get('job0', 'TRIGGER_PHRASE')
-TRIGGER_PHRASE_TO_RUN = parser.get('job0', 'TRIGGER_PHRASE_TO_RUN')
+# print(jobs_dict)
+print(jobs_dict.keys())
+print(jobs_dict.items())
 
-SLACK_CHANNEL = parser.get('job0', 'SLACK_CHANNEL')
-SLACK_USERS = parser.get('job0', 'SLACK_USERS').split()
+for job in jobs_dict.keys():
+    slack_channels.add(jobs_dict[job]['slack_channel'])
+print(slack_channels)
+
+# print help
+for job in jobs_dict.keys():
+    print('{}: ```{}```'.format(jobs_dict[job]['help'], jobs_dict[job]['trigger']))
 
 def process_message(data):
     print("jenkins_job0: " + str(data))
@@ -32,7 +40,7 @@ def process_message(data):
             user = data['name']
             print(SLACK_USERS)
             
-            if TRIGGER_PHRASE in text and chan == SLACK_CHANNEL:
+            if TRIGGER_PHRASE in text and chan in slack_channels:
 
                 if not TRIGGER_PHRASE_TO_RUN in text:
                     DRY_RUN = 'True'
