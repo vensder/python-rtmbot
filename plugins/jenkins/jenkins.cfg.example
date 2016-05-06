@@ -1,0 +1,26 @@
+[jenkins]
+JENKINS_URL: https://jenkins.example.com
+
+[job0]
+NAME: jenkins_job0_name_here
+TOKEN: jAdfkafafASDFAsdfadsfasf
+TRIGGER: @deploy myapp staging
+HELP: Deploy custom branches on staging
+SLACK_CHANNEL: SlACKcHAnnELC0de
+SLACK_USERS: username1 username2
+
+[job1]
+NAME: jenkins_job1_name_here
+TOKEN: jJKJJSdfsadfasdfSFSDFSFD
+TRIGGER: @deploy myapp production
+HELP: Deploy custom branches on production
+SLACK_CHANNEL: SlACKcHAnnELC0de
+SLACK_USERS: username1 username2
+
+[job2]
+NAME: jenkins_job2_name_here
+TOKEN: qawerasdfASDFASDF
+TRIGGER: @deploy myapp staging
+HELP: Deploy custom branches on staging
+SLACK_CHANNEL: SlACKcHAnnELC0de
+SLACK_USERS: username1 username2
