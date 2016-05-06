@@ -44,7 +44,8 @@ def process_message(data):
             if text.startwith('@jenkins help') and channel in slack_channels:
                 emoji = ':question:'
                 outputs.append([channel, help_text, 'Jenkins help', emoji])
-'''
+
+                '''
                 if user in SLACK_USERS:
                     print(user)
                     print(text)
@@ -67,7 +68,8 @@ def process_message(data):
                     output_message = 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('
                     print(sc.api_call("chat.postMessage", as_user="false", icon_emoji=":trollface:", channel=channel, text=output_message))
                     #outputs.append([data['channel'], 'Sorry, but user "' + user + '" doesn\'t have permission for this job :('])
-'''
+                '''
+
         except KeyError as e:
             print('KeyError Exception: ', e)
 
