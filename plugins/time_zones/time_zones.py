@@ -124,6 +124,7 @@ if __name__ == '__main__':
     print(time_parsing('a sadfk kasdfl kjasdf 8AM', time_zone))
     print(time_parsing('a sadfk kasdfl kjasdf 14 PM', time_zone)) #should print current time (because wrong format)
     print(time_parsing('a sadfk kasdfl kjasdf @time', time_zone))
+    print(time_parsing('I am available after @time 9 am', time_zone))
 
     class TestTimeParsing(unittest.TestCase):
         """
