@@ -246,6 +246,16 @@ if __name__ == '__main__':
             parsed_time = time_parsing(user_string, time_zone)
             self.assertEqual(parsed_time, time_now)
 
+        def test_user_string1(self):
+            """
+            I am available after @time 9 am
+            """
+            t = datetime.now()
+            time_now = '{:0>2}:{:0>2}'.format(t.hour, t.minute)
+
+            user_string = 'I am available after @time 9 am'
+            parsed_time = time_parsing(user_string, time_zone)
+            self.assertEqual(parsed_time, '09:00')
 
     unittest.main()
 
