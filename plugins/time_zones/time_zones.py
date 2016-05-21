@@ -65,7 +65,7 @@ def process_message(data):
     global tz
     global timezone_set
     
-    if 'text' in data:
+    if 'text' in data and data['text']:
         try:
             text = data['text']
             channel = data['channel']

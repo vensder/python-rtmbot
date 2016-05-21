@@ -29,7 +29,7 @@ print(slack_channels)
 
 def process_message(data):
     print("jenkins_job0.py: " + str(data))
-    if 'text' in data:
+    if 'text' in data and data['text']:
         try:
             text = data['text']
             channel = data['channel']
