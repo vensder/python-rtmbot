@@ -8,7 +8,6 @@ import requests
 outputs = []
 jobs_dict = {} # dict of dicts with jobs configs
 slack_channels = set()
-help_text = ''
 
 Config = ConfigParser()
 Config.read(path.dirname(path.realpath(__file__)) + '/jenkins.cfg')
@@ -28,11 +27,6 @@ for job in jobs_dict.keys():
     slack_channels.add(jobs_dict[job]['slack_channel'])
 print(slack_channels)
 
-# collect help text
-for job in jobs_dict.keys():
-    help_text = help_text + '{}: ```{}```\n'.format(jobs_dict[job]['help'], jobs_dict[job]['trigger'])
-print(help_text)
-
 def process_message(data):
     print("jenkins_job0.py: " + str(data))
     if 'text' in data:
@@ -41,9 +35,15 @@ def process_message(data):
             channel = data['channel']
             user = data['name']
             print('channel: ', channel)
+            print('user: ', user)
 
             if text.startswith('@jenkins help') and channel in slack_channels:
                 emoji = ':question:'
+                help_text = ''
+                for job in jobs_dict.keys():
+                    if channel == jobs_dict[job]['slack_channel']:
+                        help_text += '{}: ```{}```\n'.format(jobs_dict[job]['help'], jobs_dict[job]['trigger'])
+
                 outputs.append([channel, help_text, 'Jenkins help', emoji])
 
                 '''
