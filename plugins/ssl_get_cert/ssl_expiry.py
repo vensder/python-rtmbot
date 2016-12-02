@@ -1,34 +1,10 @@
-import socket
-import ssl
-import datetime
 import re
 
 outputs = []
 
 trigger_phrase = '@ssl get'
 #trigger_phrase_to_run = '@ssl get'
-
-
-def ssl_expiry_datetime(hostname):
-    ssl_date_fmt = r'%b %d %H:%M:%S %Y %Z'
-
-    context = ssl.create_default_context()
-    conn = context.wrap_socket(
-        socket.socket(socket.AF_INET),
-        server_hostname=hostname,
-    )
-    # 3 second timeout
-    conn.settimeout(3.0)
-
-    conn.connect((hostname, 443))
-    ssl_info = conn.getpeercert()
-    # parse the string from the certificate into a Python datetime object
-    return datetime.datetime.strptime(ssl_info['notAfter'], ssl_date_fmt) # 2016-04-19 23:59:59 # <class 'datetime.datetime'>
-
-# emoji
-# :white_check_mark:
-# :warning:
-
+#PATTERNS=( '^\w+\.overl\.ai\.coffee' '^\w+\.ehr\.works\.run' '^\w+\.staging\.visitnow.\org' )
 
 def process_message(data):
     
@@ -43,12 +19,26 @@ def process_message(data):
             trigger = re.compile(trigger_phrase)
             if trigger.match(text):
                 string_with_domain = trigger.split(text)[1] # rest of text without trigger phrase
-                
-                mask = re.compile(r'([A-Za-z0-9-]+\.)+\w+') # domain pattern
-                if mask.search(string_with_domain):
-                    search_domain = mask.search(string_with_domain)
+
+                mask_overlay = re.compile(r'[\w-]+\.overl\.ai\.coffee') # precompile pattern for <subdomain>.overl.ai.coffee
+                mask_ehr = re.compile(r'[\w-]+\.ehr\.works\.run') # precompile pattern for <subdomain>.ehr.works.run
+                mask_visit = re.compile(r'[\w-]+\.staging\.visitnow\.org') # precompile pattern for <subdomain>.staging.visitnow.org
+
+                if mask_overlay.search(string_with_domain):
+                    search_domain = mask_overlay.search(string_with_domain)
                     domain = search_domain.group()
-                    
+                    # TODO send to Jeknins command to get ssl for overl.ai.coffee subdomain
+
+                if mask_ehr.search(string_with_domain):
+                    search_domain = mask_ehr.search(string_with_domain)
+                    domain = search_domain.group()
+                    # TODO send request to Jenkins for run gettin ssl for ehr.works.run subdomain
+
+                if mask_visit.search(string_with_domain):
+                    search_domain = mask_visit.search(string_with_domain)
+                    domain = search_domain.group()
+                    # TODO send requset to Jenkins for getting ssl for staging.visitnow.org subdomain
+
                     print(domain); print(type(domain))
                     
                     try:
