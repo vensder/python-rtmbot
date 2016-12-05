@@ -1,0 +1,10 @@
+[jenkins]
+JENKINS_URL: https://jenkins.example.com
+
+[job0]
+NAME: dbalblalablalbalbl
+TOKEN: aasdfasdfASDFAsdfasdfJJH8878
+TRIGGER: @deploy some thinsg
+HELP: Deploy custom branches on staging
+SLACK_CHANNEL: WDKASDFKSADF8
+SLACK_USERS: user-name

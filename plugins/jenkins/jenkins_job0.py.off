@@ -10,7 +10,7 @@ jobs_dict = {} # dict of dicts with jobs configs
 slack_channels = set()
 
 Config = ConfigParser()
-Config.read(path.dirname(path.realpath(__file__)) + '/jenkins.cfg')
+Config.read(path.dirname(path.realpath(__file__)) + '/jenkins.cfg.example')
 JENKINS_URL = Config.get('jenkins', 'JENKINS_URL')
 
 # collect all jobs with configs into one dict
@@ -28,7 +28,7 @@ for job in jobs_dict.keys():
 print(slack_channels)
 
 def process_message(data):
-    print("jenkins_job0.py: " + str(data))
+    print("jenkins_job0.py.off: " + str(data))
     if 'text' in data and data['text']:
         try:
             text = data['text']

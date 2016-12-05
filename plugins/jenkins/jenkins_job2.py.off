@@ -23,6 +23,8 @@ TRIGGER_PHRASE_TO_RUN = parser.get('job2', 'TRIGGER_PHRASE_TO_RUN')
 SLACK_CHANNEL = parser.get('job2', 'SLACK_CHANNEL')
 SLACK_USERS = parser.get('job2', 'SLACK_USERS').split()
 
+
+# noinspection PyInterpreter
 def process_message(data):
     print("jenkins_job2: " + str(data))
     if 'text' in data:
