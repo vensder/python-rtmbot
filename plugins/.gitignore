@@ -1,0 +1,13 @@
+*.pyc
+*.conf
+*.cfg
+*.log
+env
+env3
+rtmbot
+.idea
+
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
