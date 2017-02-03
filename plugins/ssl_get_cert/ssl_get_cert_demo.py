@@ -72,6 +72,7 @@ def process_message(data):
                     print(string_with_domain)
                     mask_demo = re.compile(r'[\w-]+\.demo\.ai\.coffee') # precompile pattern for <subdomain>.demo.ai.coffee
                     mask_visit = re.compile(r'[\w-]+\.demo\.visitnow\.org') # precompile pattern for <subdomain>.demo.visitnow.org
+                    mask_truclinic = re.compile(r'[\w-]+\.demo\.tru\.clinic') # precompile pattern for <subdomain>.demo.tru.clinic
 
                     if mask_demo.search(string_with_domain):
                         search_domain = mask_demo.search(string_with_domain)
@@ -81,6 +82,12 @@ def process_message(data):
 
                     elif mask_visit.search(string_with_domain):
                         search_domain = mask_visit.search(string_with_domain)
+                        domain = search_domain.group()
+                        print(domain)
+                        send_request_to_Jenkins_demo(domain, user, channel)
+
+                    elif mask_truclinic.search(string_with_domain):
+                        search_domain = mask_truclinic.search(string_with_domain)
                         domain = search_domain.group()
                         print(domain)
                         send_request_to_Jenkins_demo(domain, user, channel)
