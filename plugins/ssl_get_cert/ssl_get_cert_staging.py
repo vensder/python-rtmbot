@@ -64,6 +64,7 @@ def process_message(data):
                     mask_overlay = re.compile(r'[\w-]+\.overl\.ai\.coffee') # precompile pattern for <subdomain>.overl.ai.coffee
                     mask_ehr = re.compile(r'[\w-]+\.ehr\.works\.run') # precompile pattern for <subdomain>.ehr.works.run
                     mask_visit = re.compile(r'[\w-]+\.staging\.visitnow\.org') # precompile pattern for <subdomain>.staging.visitnow.org
+                    mask_truclinic = re.compile(r'[\w-]+\.demo\.tru\.clinic') # precompile pattern for <subdomain>.demo.tru.clinic
 
                     if mask_overlay.search(string_with_domain):
                         search_domain = mask_overlay.search(string_with_domain)
@@ -82,6 +83,12 @@ def process_message(data):
                         domain = search_domain.group()
                         print(domain)
                         send_request_to_Jenkins_staging(domain, user, channel)
+                    
+                    elif mask_truclinic.search(string_with_domain):
+                        search_domain = mask_truclinic.search(string_with_domain)
+                        domain = search_domain.group()
+                        print(domain)
+                        send_request_to_Jenkins_demo(domain, user, channel)
 
                     else:
                         mask = re.compile(r'([A-Za-z0-9-]+\.)+\w+')  # domain pattern
